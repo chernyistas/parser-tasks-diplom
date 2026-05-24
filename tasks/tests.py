@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
@@ -35,6 +36,8 @@ class TaskAPITest(APITestCase):
     """Тесты для API задач"""
 
     def setUp(self):
+        self.user = User.objects.create_user(username="testuser", password="testpass123")
+        self.client.force_authenticate(user=self.user)
         self.task1 = Task.objects.create(title="API Задача 1", source="mock", source_id="1", status="new")
         self.task2 = Task.objects.create(title="API Задача 2", source="habr", source_id="2", status="in_progress")
         self.url = reverse("tasks:task-list")
